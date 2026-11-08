@@ -2,7 +2,7 @@
     "taskDefinitionArn": "arn:aws:ecs:eu-west-2:715841345153:task-definition/project-sunday:1",
     "containerDefinitions": [
         {
-            "name": "nodejs-app-project",
+            "name": "Main",
             "image": "ebenezer97/rental-app-frontend",
             "cpu": 0,
             "portMappings": [
