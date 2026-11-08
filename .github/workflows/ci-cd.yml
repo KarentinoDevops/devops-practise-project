@@ -1,6 +1,3 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Node.js CI-CD
 
 on: push
@@ -9,13 +6,13 @@ permissions:
   contents: read
 
 env:
-  AWS_REGION: eu-north-1                   # set this to your preferred AWS region, e.g. us-west-1
+  AWS_REGION: eu-west-2                   # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: MY_ECR_REPOSITORY           # set this to your Amazon ECR repository name
-  ECS_SERVICE: dev-task-definition-service-vkwl05nm                 # set this to your Amazon ECS service name
-  ECS_CLUSTER: devcluster                 # set this to your Amazon ECS cluster name
+  ECS_SERVICE: project-sunday-service-0ibk3om3                 # set this to your Amazon ECS service name
+  ECS_CLUSTER: project-cluster                 # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: ./task-definition.json # set this to the path to your Amazon ECS task definition
                                                # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: nodejs-app-image
+  CONTAINER_NAME: nodejs-app-project
 
 jobs:
   build:

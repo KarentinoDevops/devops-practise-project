@@ -1,21 +1,26 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:eu-north-1:715841345153:task-definition/dev-task-definition:2",
+    "taskDefinitionArn": "arn:aws:ecs:eu-west-2:715841345153:task-definition/project-sunday:1",
     "containerDefinitions": [
         {
-            "name": "nodejs-app-image",
-            "image": "karentinodevops/nodejs-app:latest",
+            "name": "Main",
+            "image": "ebenezer97/rental-app-frontend",
             "cpu": 0,
             "portMappings": [
                 {
                     "containerPort": 3000,
                     "hostPort": 3000,
                     "protocol": "tcp",
-                    "name": "nodejs-app-image-3000-tcp",
+                    "name": "main-3000-tcp",
                     "appProtocol": "http"
                 }
             ],
             "essential": true,
-            "environment": [],
+            "environment": [
+                {
+                    "name": "NEXT_PUBLIC_RENTAL_API_URL",
+                    "value": "http://rental-app-alb-2093134641.us-east-1.elb.amazonaws.com"
+                }
+            ],
             "environmentFiles": [],
             "mountPoints": [],
             "volumesFrom": [],
@@ -23,9 +28,9 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-group": "/ecs/dev-task-definition",
+                    "awslogs-group": "/ecs/project-sunday",
                     "awslogs-create-group": "true",
-                    "awslogs-region": "eu-north-1",
+                    "awslogs-region": "eu-west-2",
                     "awslogs-stream-prefix": "ecs"
                 },
                 "secretOptions": []
@@ -33,11 +38,10 @@
             "systemControls": []
         }
     ],
-    "family": "dev-task-definition",
-    "taskRoleArn": "arn:aws:iam::715841345153:role/ecsTaskExecutionRole",
+    "family": "project-sunday",
     "executionRoleArn": "arn:aws:iam::715841345153:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
-    "revision": 2,
+    "revision": 1,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -49,9 +53,6 @@
         },
         {
             "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.task-iam-role"
         },
         {
             "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
@@ -78,7 +79,8 @@
     ],
     "cpu": "1024",
     "memory": "3072",
-    "registeredAt": "2026-10-28T14:47:24.691Z",
+    "registeredAt": "2026-11-08T08:24:41.008Z",
     "registeredBy": "arn:aws:iam::715841345153:user/karen-admin",
+    "enableFaultInjection": false,
     "tags": []
 }
