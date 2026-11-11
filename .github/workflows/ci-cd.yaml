@@ -46,4 +46,55 @@ jobs:
                   uses: docker/build-push-action@v7
                   with:
                    push: true
-                   tags: karentinodevops/devops-node-app-repo:${{ github.sha }}      
+                   tags: karentinodevops/devops-node-app-repo:${{ github.sha }} 
+
+    deploy:
+        name: deploy to Amazon ECS
+        needs: docker
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: read
+            id-token: write
+
+        env:
+           AWS_REGION: eu-west-2                   # set this to your preferred AWS region, e.g. us-west-1
+           ECS_CLUSTER: devops-project-cluster                 # set this to your Amazon ECS cluster name
+           ECS_SERVICE: devops-project-task-definition-service-hh68gumh                 # set this to your Amazon ECS service name
+           ECS_TASK_DEFINITION: ecs-task-definition.json # set this to the path to your Amazon ECS task definition
+                                               # file, e.g. .aws/task-definition.json
+           CONTAINER_NAME: devops-project-container           # set this to the name of the container in the
+                                               # containerDefinitions section of your task definition
+
+        steps:
+         - name: Checkout
+           uses: actions/checkout@v4
+
+         - name: Configure AWS credentials
+           uses: aws-actions/configure-aws-credentials@v4
+           with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ env.AWS_REGION }}
+    
+         - name: Render ECS task definition
+           id: task-def
+           uses: aws-actions/amazon-ecs-render-task-definition@v1
+           with:
+             task-definition: ${{ env.ECS_TASK_DEFINITION }}
+             container-name: ${{ env.CONTAINER_NAME }}
+             image: karentinodevops/devops-node-app-repo:${{ github.sha }}
+
+         - name: Deploy Amazon ECS task definition
+           uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+           with:
+             task-definition: ${{ steps.task-def.outputs.task-definition }}
+             service: ${{ env.ECS_SERVICE }}
+             cluster: ${{ env.ECS_CLUSTER }}
+             wait-for-service-stability: true    
+
+         
+  
+
+    
+               
